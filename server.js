@@ -1,14 +1,8 @@
-const fs = require("fs");
-const https = require("https");
+const http = require("http");
 const WebSocket = require("ws");
 
-// ---- Load TLS certs (self-signed fine for testing) ----
-const server = https.createServer({
-  key: fs.readFileSync("key.pem"),
-  cert: fs.readFileSync("cert.pem"),
-});
+const server = http.createServer();
 
-// ---- WebSocket server on HTTPS ----
 const wss = new WebSocket.Server({ server });
 
 const rooms = {};
@@ -57,7 +51,4 @@ function broadcast(room, msg, except) {
   });
 }
 
-// ---- Start HTTPS + WSS ----
-server.listen(8080, () => {
-  console.log("WSS signaling server running on wss://localhost:8080/ws");
-});
+server.listen(8080);
